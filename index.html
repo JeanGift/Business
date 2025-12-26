@@ -32,12 +32,15 @@
       line-height:1.45;
     }
 
-    /* Header */
+    /* Header (sticky so CTA never gets hidden) */
     header{
+      position: sticky;
+      top: 0;
+      z-index: 99999;
       display:flex;
       align-items:center;
       gap:16px;
-      padding:18px 22px;
+      padding:14px 18px;
       background: linear-gradient(90deg, var(--green), #4caf50 60%);
       color: #fff;
       box-shadow: 0 6px 18px rgba(16,24,40,0.06);
@@ -59,8 +62,27 @@
     .nav a{color:rgba(255,255,255,0.95);text-decoration:none;padding:8px 12px;border-radius:10px;font-weight:600}
     .nav a:hover{background:rgba(255,255,255,0.06)}
 
+    /* Voyager CTA placed at the far left of the nav area (always visible) */
+    .voyager-btn{
+      background: #ffffff;
+      color: var(--green-600);
+      font-weight:800;
+      padding:8px 14px;
+      border-radius:999px;
+      border:2px solid rgba(255,255,255,0.12);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      cursor:pointer;
+      box-shadow: 0 8px 30px rgba(2,6,23,0.12);
+      white-space:nowrap;
+    }
+    .voyager-btn:active{ transform: translateY(1px) }
+    .voyager-btn:focus { outline: 3px solid rgba(255,255,255,0.18); outline-offset: 2px; }
+
     /* Container */
-    .container{padding:22px;max-width:1200px;margin:0 auto; padding-bottom:120px /* space for floating CTA */ }
+    .container{padding:22px;max-width:1200px;margin:0 auto}
 
     /* Search + filters */
     .topbar{display:flex;gap:12px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
@@ -120,39 +142,15 @@
     /* toast */
     .toast{position:fixed;right:20px;bottom:20px;background:rgba(2,6,23,0.9);color:white;padding:12px 14px;border-radius:12px;display:none;opacity:0;transform:translateY(8px);transition:opacity .2s, transform .2s}
 
-    /* Floating CTA (ensures visible on mobile) */
-    .fab {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      z-index: 99999; /* very high so it sits above product cards */
-      background: linear-gradient(90deg,var(--green),#22c55e);
-      color: white;
-      padding: 14px 18px;
-      border-radius: 999px;
-      font-weight:700;
-      box-shadow: 0 18px 48px rgba(16,24,40,0.18);
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      text-decoration: none;
-    }
-    .fab .emoji { font-size:18px; line-height:1 }
-
-    /* make sure product grid isn't hidden behind CTA */
-    .products { padding-bottom: 24px }
-
     /* responsive */
     @media(max-width:900px){ .products{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))} }
     @media(max-width:680px){
-      .nav{display:none}
+      .nav{display:flex;gap:8px} /* keep nav visible on small screens */
       .topbar{flex-direction:column;align-items:stretch}
       .search{width:100%}
       .grid-two{grid-template-columns:1fr}
-      /* ensure container bottom padding is more on small screens */
-      .container{padding-bottom:140px}
+      /* keep container readable on small screens */
+      .container{padding-bottom:90px}
     }
   </style>
 </head>
@@ -166,23 +164,21 @@
       </div>
     </div>
 
+    <!-- Voyager CTA — placed in header so it never gets blocked -->
+    <div style="margin-left:18px">
+      <button id="voyagerBtn" class="voyager-btn" aria-label="New — Voyager Go">New — Voyager Go</button>
+    </div>
+
     <nav class="nav" aria-label="Main navigation">
       <a href="#/">Home</a>
       <a href="#/contact">Contact</a>
       <!-- Admin link intentionally omitted for security -->
-      <a href="#/" class="pill" style="background: rgba(255,255,255,0.12); padding:8px 10px; border-radius:10px; font-weight:700; color:#fff; text-decoration:none">Open App</a>
     </nav>
   </header>
 
   <main class="container" id="app" role="main" aria-live="polite">
     <!-- rendered by JS -->
   </main>
-
-  <!-- Floating CTA: visible and guaranteed above product cards on mobile -->
-  <button id="openAppBtn" class="fab" aria-label="Open the app">
-    <span class="emoji">🚀</span>
-    <span>Go to our app</span>
-  </button>
 
   <!-- Modal -->
   <div class="modal-backdrop" id="modal" aria-hidden="true">
@@ -324,7 +320,7 @@ function drawProducts(){
 /* ====== Utilities for currency + formatting ====== */
 function formatNumber(n){ try{ return Number(n).toLocaleString('en-KE'); }catch(e){ return n } }
 
-/* ===== Modals (pretty) ===== */
+/* ===== Modals (pretty) ====== */
 const modalBackdrop = document.getElementById('modal');
 const modalTitle = document.getElementById('modalTitle');
 const modalBody = document.getElementById('modalBody');
@@ -558,21 +554,13 @@ setInterval(()=>{ const curr = JSON.stringify(getProducts()); if(curr !== lastPr
 /* ===== Hidden convenience: Ctrl+Shift+K opens admin.html (on your machine) ===== */
 document.addEventListener('keydown', (e)=>{ if(e.ctrlKey && e.shiftKey && e.key && e.key.toLowerCase() === 'k'){ window.location.href = 'admin.html'; } });
 
-/* ===== Floating CTA wiring ===== */
-document.getElementById('openAppBtn').addEventListener('click', ()=>{
+/* ===== Voyager CTA wiring (header button) ===== */
+document.getElementById('voyagerBtn').addEventListener('click', ()=>{
   // navigate to app home (router uses hash)
   location.hash = '/';
-  // brief focus to the search input for immediate use on mobile
+  // focus the search input on mobile/desktop after a short delay
   setTimeout(()=>{ const q = document.getElementById('q'); if(q) q.focus(); }, 250);
 });
-
-// Hide CTA when modal is open so it doesn't overlap dialog controls
-const observer = new MutationObserver(()=> {
-  const modalVisible = modalBackdrop.style.display === 'flex';
-  document.getElementById('openAppBtn').style.display = modalVisible ? 'none' : 'flex';
-});
-observer.observe(modalBackdrop, { attributes: true, attributeFilter: ['style'] });
-
 </script>
 </body>
 </html>
