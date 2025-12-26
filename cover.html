@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- added viewport-fit=cover so safe-area-inset works on notched phones -->
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Universal Business Marketplace — Epic Cover</title>
   <meta name="description" content="Universal Business Marketplace — sell online, manage orders and chat. Built by Voyager Go technology company." />
   <style>
@@ -24,6 +25,10 @@
       --radius:18px;
       --accent-shadow: 0 12px 50px rgba(0,0,0,0.6);
       --text-contrast: #f7fbff;
+
+      /* CTA sizing */
+      --cta-height:78px;
+      --cta-gap:18px;
     }
     *{box-sizing:border-box}
     html,body{height:100%}
@@ -35,10 +40,47 @@
       display:flex;align-items:stretch;justify-content:center;padding:0 20px;
     }
 
-    /* PAGE WRAPPER */
-    .wrap{width:100%;max-width:var(--max-width);margin:36px auto;display:grid;grid-template-columns:1fr 520px;gap:36px;align-items:center}
+    /* =============================
+       FLOATING TOP CTA (FIRST DOM ELEMENT)
+       - placed as the first node in the body
+       - fixed top center, safe-area-aware
+       - extremely high z-index so nothing obstructs it
+       ============================= */
+    .floating-cta {
+      position: fixed;
+      /* safe-area aware top (works on notched devices) */
+      top: calc(env(safe-area-inset-top, 8px) + 6px);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2147483647; /* extremely high - sits above everything */
+      min-width: 320px;
+      max-width: calc(100% - 36px);
+      height: var(--cta-height);
+      background: linear-gradient(90deg, #ffffff, #fbfffe);
+      color: #062725;
+      border-radius: 14px;
+      padding: 12px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(2,6,23,0.18);
+      border: 1px solid rgba(0,0,0,0.06);
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      gap:4px;
+      user-select:none;
+    }
+    .floating-cta__title{ font-weight:900; font-size:16px; color:#033635; letter-spacing:0.2px; }
+    .floating-cta__brand{ font-weight:800; font-size:13px; color:#082e2b; opacity:0.95; }
+    .floating-cta__tag{ font-weight:600; font-size:12px; color:#27413f; opacity:0.88; }
 
-    /* HERO LEFT */
+    /* make sure main content isn't hidden under the CTA: push the wrapper down */
+    .wrap{ width:100%; max-width:var(--max-width); margin: calc(var(--cta-height) + var(--cta-gap)) auto 36px; display:grid; grid-template-columns:1fr 520px; gap:36px; align-items:center; }
+
+    /* PAGE STYLES (unchanged) */
     .hero{
       padding:28px 24px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
       backdrop-filter: blur(6px);box-shadow: var(--accent-shadow);
@@ -56,54 +98,57 @@
     .ctas{display:flex;gap:12px;margin-top:24px}
     .btn-primary{background:linear-gradient(90deg,var(--blue-ui-a),var(--blue-ui-b));color:#00131b;border:none;padding:14px 18px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 12px 40px rgba(40,220,255,0.08)}
     .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:14px 16px;border-radius:12px;color:rgba(255,255,255,0.9);font-weight:700;cursor:pointer}
-
     .small-note{margin-top:14px;color:rgba(255,255,255,0.55);font-size:13px}
 
-    /* HERO RIGHT: showcase mockup */
     .showcase{
       position:relative;height:520px;border-radius:20px;overflow:visible;display:flex;align-items:flex-end;justify-content:center;
       background: radial-gradient(800px 400px at 50% 10%, rgba(12,50,40,0.30), transparent 30%), linear-gradient(180deg,var(--floor-a),var(--floor-b));
       box-shadow: 0 30px 80px rgba(2,6,23,0.6);
       padding-bottom:46px;
     }
-
-    /* animated cadmium band */
     .cadmium-band{position:absolute;left:-20%;top:6%;width:140%;height:18%;pointer-events:none;mix-blend-mode:screen;opacity:0.95;border-radius:12px;filter:blur(28px);
       background:linear-gradient(90deg, rgba(255,210,30,0.12), rgba(255,210,30,0.32), rgba(255,210,30,0.12));animation:slide 8s linear infinite}
     @keyframes slide{0%{transform:translateX(-8%)}50%{transform:translateX(8%)}100%{transform:translateX(-8%)}}
 
-    /* floating UI card */
     .device{width:360px;height:640px;border-radius:28px;background:linear-gradient(180deg, rgba(230,247,255,0.96), rgba(210,240,255,0.88));box-shadow: 0 30px 80px rgba(14,76,110,0.28);transform:translateY(-30px);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.12)}
     .device::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.04),transparent 40%);pointer-events:none}
-
-    /* sample top bar */
     .dev-top{height:56px;padding:12px 16px;display:flex;align-items:center;gap:12px}
     .circle{width:36px;height:36px;border-radius:10px;background:linear-gradient(90deg,#fff,#e6f7ff);box-shadow:inset 0 -6px 18px rgba(0,0,0,0.06)}
     .dev-title{font-weight:800;color:#042a30}
-
     .dev-list{padding:12px;display:flex;flex-direction:column;gap:10px}
     .item{background:white;border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(6,30,40,0.06)}
     .itm-thumb{width:64px;height:48px;border-radius:8px;background:linear-gradient(90deg,#eee,#fff);flex-shrink:0}
     .itm-name{font-weight:700;color:#02262a}
     .itm-meta{font-size:13px;color:#5b6b6f}
-
-    /* floating badge */
     .badge-floating{position:absolute;right:12%;bottom:12%;background:linear-gradient(90deg,var(--cadmium),#ffd85a);padding:12px 16px;border-radius:12px;color:#071114;font-weight:800;transform:translateY(8px);box-shadow:0 18px 60px rgba(255,210,30,0.12)}
-
-    /* subtle breathing glow */
     .showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(400px 200px at 60% 30%, rgba(200,240,255,0.08), transparent 20%), radial-gradient(600px 300px at 20% 80%, rgba(255,220,60,0.04), transparent 18%)}
 
-    /* footer */
     footer{grid-column:1/-1;margin-top:28px;display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,0.72);font-size:14px}
     footer .brandline{display:flex;gap:12px;align-items:center}
     .flag{font-size:16px}
 
-    /* responsive */
-    @media(max-width:980px){.wrap{grid-template-columns:1fr;gap:18px}.showcase{height:420px}}
-    @media(max-width:560px){h1{font-size:32px}.hero{padding:18px}} 
+    /* responsive adjustments */
+    @media(max-width:980px){ .wrap{grid-template-columns:1fr;gap:18px}.showcase{height:420px} }
+    @media(max-width:560px){
+      h1{font-size:32px}
+      .hero{padding:18px}
+      .floating-cta{ min-width: 260px; height: 68px; }
+      .wrap{ margin: calc(var(--cta-height) + 12px) auto 36px; }
+    }
   </style>
 </head>
 <body>
+  <!-- ============== FIRST DOM ELEMENT ==============
+       Floating top CTA. It's the absolute topmost element on all devices.
+       Click navigates to your app (index.html) — change target if needed.
+       ================================================== -->
+  <div id="floatingCta" class="floating-cta" role="button" aria-label="Go to our app — Try it...">
+    <div class="floating-cta__title">Go to our app — Try it</div>
+    <div class="floating-cta__brand">Universal Business Marketplace</div>
+    <div class="floating-cta__tag">Sell faster, manage easier.</div>
+  </div>
+
+  <!-- ============== ORIGINAL PAGE CONTENT (kept intact) ============== -->
   <div class="wrap">
     <section class="hero">
       <div class="eyebrow">New — Voyager Go</div>
@@ -157,17 +202,32 @@
   </div>
 
   <script>
-    // gentle pulsing for the blue-ui area on load
+    // Wire the floating CTA (topmost) to open the app and focus search on the app page.
     (function(){
-      // small accessibility-friendly animation: pulse background color on .device every 3s
-      const devs = document.querySelectorAll('.device');
-      devs.forEach((d, i)=>{
-        d.animate([
-          {filter:'drop-shadow(0 20px 60px rgba(14,76,110,0.28))'},
-          {filter:'drop-shadow(0 30px 90px rgba(14,110,170,0.34))'},
-          {filter:'drop-shadow(0 20px 60px rgba(14,76,110,0.28))'}
-        ], {duration:4000 + i*300, iterations:Infinity});
+      const cta = document.getElementById('floatingCta');
+      cta.addEventListener('click', () => {
+        // same target as the hero CTA — change to your actual app route if different
+        location.href = 'index.html';
       });
+
+      // optional: allow users to dismiss temporarily with a long-press (press & hold)
+      let pressTimer = null;
+      cta.addEventListener('pointerdown', (e) => {
+        pressTimer = setTimeout(()=>{ cta.style.display = 'none'; }, 900);
+      });
+      document.addEventListener('pointerup', ()=>{ if(pressTimer) clearTimeout(pressTimer); });
+
+      // keep original device pulse animation
+      (function(){
+        const devs = document.querySelectorAll('.device');
+        devs.forEach((d, i)=>{
+          d.animate([
+            {filter:'drop-shadow(0 20px 60px rgba(14,76,110,0.28))'},
+            {filter:'drop-shadow(0 30px 90px rgba(14,110,170,0.34))'},
+            {filter:'drop-shadow(0 20px 60px rgba(14,76,110,0.28))'}
+          ], {duration:4000 + i*300, iterations:Infinity});
+        });
+      })();
     })();
   </script>
 </body>
