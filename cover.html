@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Universal Business Marketplace — Epic Cover</title>
+  <meta name="description" content="Universal Business Marketplace — sell online, manage orders and chat. Built by Voyager Go technology company." />
+  <style>
+    /* COLOR NOTES
+       vantablack-like: #050507 (very dark)
+       forest green floor: #0b3d2e -> #0f512f
+       cadmium yellow accent: #ffd200 (animated)
+       vibrant whitish-blue UI glow: #e6f7ff -> #ccf2ff
+    */
+    :root{
+      --bg-dark:#050507;
+      --floor-a:#072b1f; /* deep forest */
+      --floor-b:#0f512f; /* lighter forest */
+      --cadmium:#ffd200;
+      --blue-ui-a:#e8fbff;
+      --blue-ui-b:#cfeeff;
+      --glass: rgba(255,255,255,0.06);
+      --max-width:1200px;
+      --radius:18px;
+      --accent-shadow: 0 12px 50px rgba(0,0,0,0.6);
+      --text-contrast: #f7fbff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background: var(--bg-dark);
+      color:var(--text-contrast);
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+      display:flex;align-items:stretch;justify-content:center;padding:0 20px;
+    }
+
+    /* PAGE WRAPPER */
+    .wrap{width:100%;max-width:var(--max-width);margin:36px auto;display:grid;grid-template-columns:1fr 520px;gap:36px;align-items:center}
+
+    /* HERO LEFT */
+    .hero{
+      padding:28px 24px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      backdrop-filter: blur(6px);box-shadow: var(--accent-shadow);
+    }
+    .eyebrow{display:inline-block;padding:6px 12px;border-radius:999px;background:linear-gradient(90deg,var(--cadmium),#ffc400);color:#08110a;font-weight:700;font-size:13px;margin-bottom:18px}
+    h1{font-size:48px;line-height:1.02;margin:4px 0 10px;font-weight:800;letter-spacing:-0.02em;color:linear-gradient(90deg,#fff,#e6f7ff)}
+    .headline{font-size:44px;margin:0;color:var(--text-contrast)}
+    .sub{margin-top:10px;color:rgba(230,247,255,0.95);font-size:18px;max-width:56ch}
+
+    .features{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+    .feature{display:flex;gap:12px;align-items:flex-start}
+    .dot{width:12px;height:12px;border-radius:4px;background:linear-gradient(180deg,var(--cadmium),#ffc400);box-shadow:0 6px 18px rgba(255,210,30,0.14)}
+    .ftxt{font-size:15px;color:rgba(230,247,255,0.9)}
+
+    .ctas{display:flex;gap:12px;margin-top:24px}
+    .btn-primary{background:linear-gradient(90deg,var(--blue-ui-a),var(--blue-ui-b));color:#00131b;border:none;padding:14px 18px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 12px 40px rgba(40,220,255,0.08)}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:14px 16px;border-radius:12px;color:rgba(255,255,255,0.9);font-weight:700;cursor:pointer}
+
+    .small-note{margin-top:14px;color:rgba(255,255,255,0.55);font-size:13px}
+
+    /* HERO RIGHT: showcase mockup */
+    .showcase{
+      position:relative;height:520px;border-radius:20px;overflow:visible;display:flex;align-items:flex-end;justify-content:center;
+      background: radial-gradient(800px 400px at 50% 10%, rgba(12,50,40,0.30), transparent 30%), linear-gradient(180deg,var(--floor-a),var(--floor-b));
+      box-shadow: 0 30px 80px rgba(2,6,23,0.6);
+      padding-bottom:46px;
+    }
+
+    /* animated cadmium band */
+    .cadmium-band{position:absolute;left:-20%;top:6%;width:140%;height:18%;pointer-events:none;mix-blend-mode:screen;opacity:0.95;border-radius:12px;filter:blur(28px);
+      background:linear-gradient(90deg, rgba(255,210,30,0.12), rgba(255,210,30,0.32), rgba(255,210,30,0.12));animation:slide 8s linear infinite}
+    @keyframes slide{0%{transform:translateX(-8%)}50%{transform:translateX(8%)}100%{transform:translateX(-8%)}}
+
+    /* floating UI card */
+    .device{width:360px;height:640px;border-radius:28px;background:linear-gradient(180deg, rgba(230,247,255,0.96), rgba(210,240,255,0.88));box-shadow: 0 30px 80px rgba(14,76,110,0.28);transform:translateY(-30px);position:relative;overflow:hidden;border:1px solid rgba(255,255,255,0.12)}
+    .device::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.04),transparent 40%);pointer-events:none}
+
+    /* sample top bar */
+    .dev-top{height:56px;padding:12px 16px;display:flex;align-items:center;gap:12px}
+    .circle{width:36px;height:36px;border-radius:10px;background:linear-gradient(90deg,#fff,#e6f7ff);box-shadow:inset 0 -6px 18px rgba(0,0,0,0.06)}
+    .dev-title{font-weight:800;color:#042a30}
+
+    .dev-list{padding:12px;display:flex;flex-direction:column;gap:10px}
+    .item{background:white;border-radius:10px;padding:10px;display:flex;align-items:center;gap:10px;box-shadow:0 8px 30px rgba(6,30,40,0.06)}
+    .itm-thumb{width:64px;height:48px;border-radius:8px;background:linear-gradient(90deg,#eee,#fff);flex-shrink:0}
+    .itm-name{font-weight:700;color:#02262a}
+    .itm-meta{font-size:13px;color:#5b6b6f}
+
+    /* floating badge */
+    .badge-floating{position:absolute;right:12%;bottom:12%;background:linear-gradient(90deg,var(--cadmium),#ffd85a);padding:12px 16px;border-radius:12px;color:#071114;font-weight:800;transform:translateY(8px);box-shadow:0 18px 60px rgba(255,210,30,0.12)}
+
+    /* subtle breathing glow */
+    .showcase::before{content:'';position:absolute;inset:0;background:radial-gradient(400px 200px at 60% 30%, rgba(200,240,255,0.08), transparent 20%), radial-gradient(600px 300px at 20% 80%, rgba(255,220,60,0.04), transparent 18%)}
+
+    /* footer */
+    footer{grid-column:1/-1;margin-top:28px;display:flex;align-items:center;justify-content:space-between;color:rgba(255,255,255,0.72);font-size:14px}
+    footer .brandline{display:flex;gap:12px;align-items:center}
+    .flag{font-size:16px}
+
+    /* responsive */
+    @media(max-width:980px){.wrap{grid-template-columns:1fr;gap:18px}.showcase{height:420px}}
+    @media(max-width:560px){h1{font-size:32px}.hero{padding:18px}} 
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">New — Voyager Go</div>
+      <h1 class="headline">Universal Business Marketplace<br><span style="color:var(--cadmium)">Sell faster</span>, manage easier.</h1>
+
+      <p class="sub">A single-file, offline-first storefront that lets small businesses list items, accept orders, chat with customers and export/import data — beautifully designed and ready to ship.</p>
+
+      <div class="features">
+        <div class="feature"><div class="dot"></div><div class="ftxt">One-click product publishing — images, stock & prices</div></div>
+        <div class="feature"><div class="dot"></div><div class="ftxt">Order management with status, undo & customer chat</div></div>
+        <div class="feature"><div class="dot"></div><div class="ftxt">CSV import/export, offline-ready, simple install</div></div>
+      </div>
+
+      <div class="ctas">
+        <button class="btn-primary" onclick="location.href='index.html'">Go to our app — Try it</button>
+        <button class="btn-ghost" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">See more about us</button>
+      </div>
+
+      <div class="small-note">Built with ❤️ by Voyager Go — American design, Kenyan hustle.</div>
+    </section>
+
+    <aside class="showcase" aria-hidden="true">
+      <div class="cadmium-band" aria-hidden></div>
+
+      <!-- floating device mockup -->
+      <div class="device" style="transform: translateY(-36px) rotate(-3deg);">
+        <div class="dev-top"><div class="circle"></div><div class="dev-title">Marketplace</div></div>
+        <div class="dev-list">
+          <div class="item"><div class="itm-thumb"></div><div><div class="itm-name">Fresh Apples</div><div class="itm-meta">KSh 300 • Stock 12</div></div></div>
+          <div class="item"><div class="itm-thumb"></div><div><div class="itm-name">Beauty Lotion</div><div class="itm-meta">KSh 800 • Stock 30</div></div></div>
+          <div class="item"><div class="itm-thumb"></div><div><div class="itm-name">Men's Shoes</div><div class="itm-meta">KSh 2,500 • Stock 4</div></div></div>
+        </div>
+      </div>
+
+      <div class="device" style="position:absolute;width:220px;height:140px;right:8%;top:18%;border-radius:14px;transform:rotate(8deg);background:linear-gradient(180deg,rgba(255,255,255,0.95),rgba(240,255,255,0.9));box-shadow:0 22px 60px rgba(2,8,20,0.5);border:1px solid rgba(255,255,255,0.06);padding:12px">
+        <div style="font-weight:800;color:#02262a">Orders</div>
+        <div style="margin-top:8px;font-size:13px;color:#14514a">Pending: <strong>3</strong></div>
+        <div style="display:flex;gap:8px;margin-top:10px"><div style="background:#fff;padding:8px;border-radius:8px;font-weight:700">Approve</div><div style="background:rgba(0,0,0,0.06);padding:8px;border-radius:8px">Contact</div></div>
+      </div>
+
+      <div class="badge-floating">Epic finish — Launch Ready</div>
+    </aside>
+
+    <footer id="about">
+      <div class="brandline"><div style="font-weight:800">Voyager Go</div><div style="color:rgba(255,255,255,0.6)">technology company</div></div>
+      <div style="display:flex;gap:18px;align-items:center">
+        <div style="color:rgba(255,255,255,0.66)">Made with ❤️ — American polish, built for Kenya</div>
+        <div style="font-size:18px" class="flag">🇺🇸</div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // gentle pulsing for the blue-ui area on load
+    (function(){
+      // small accessibility-friendly animation: pulse background color on .device every 3s
+      const devs = document.querySelectorAll('.device');
+      devs.forEach((d, i)=>{
+        d.animate([
+          {filter:'drop-shadow(0 20px 60px rgba(14,76,110,0.28))'},
+          {filter:'drop-shadow(0 30px 90px rgba(14,110,170,0.34))'},
+          {filter:'drop-shadow(0 20px 60px rgba(14,76,110,0.28))'}
+        ], {duration:4000 + i*300, iterations:Infinity});
+      });
+    })();
+  </script>
+</body>
+</html>
